@@ -12,6 +12,12 @@ object Anagrams {
 	type Word = String
 	type Occurrences = List[(Char, Int)]
 	type Sentence = List[Word]
+
+  /**
+   * The dictionary is simply a sequence of words.
+   * It is predefined and obtained as a sequence using the utility method `loadDictionary`.
+   */
+  val dictionary: List[Word] = loadDictionary()
     
 	/**
 	 *  Question 1 : converts the word into its character occurrence list.
@@ -35,7 +41,9 @@ object Anagrams {
 	 * The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
 	 * the words that have that occurrence count. This map serves as an easy way to obtain all the anagrams of a word given its occurrence list.
 	 */
-	lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = ???
+	lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = {
+    dictionary map { case ( w ) => wordOccurrences(w) }
+  }
 
 	/**
 	 * Question 3: Returns all the anagrams of a given word
