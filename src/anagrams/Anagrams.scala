@@ -5,6 +5,7 @@ package anagrams
  * MSE course, T-AdvPrPa course
  */
 object Anagrams {
+  
 	/**
 	 * Types definitions
 	 */
@@ -18,6 +19,14 @@ object Anagrams {
 	 */
 	val dictionary: List[Word] = loadDictionary()
 
+  def transformCharMapToOccurences( map : Map[Char,List[Char]], existingList : Occurrences ) : Occurrences =
+    if( map == Nil )
+      existingList
+    else {
+      val (c, l) = map.head
+      transformCharMapToOccurences( map.tail, ( c, l.length )::existingList )
+    }
+    
 	/**
 	 *  Question 1 : converts the word into its character occurrence list.
 	 *
@@ -28,7 +37,8 @@ object Anagrams {
 	 *  Note: the upper case and lower case version of the character are treated as the
 	 *  same character, and are represented as a lower case character in the occurrence list.
 	 */
-	def wordOccurrences(w: Word): Occurrences = ???
+	def wordOccurrences(w: Word): Occurrences =
+    transformCharMapToOccurences( w.toLowerCase.toList.groupBy( s => s ), Nil ).sortWith(_._1 < _._1)
 
 	/**
 	 * Question 2: Valid words
