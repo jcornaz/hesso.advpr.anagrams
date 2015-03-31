@@ -34,6 +34,23 @@ object Anagrams {
     val transformed = grouped map { case (key,value) => (key, value.length) }
     transformed.toList.sortWith( _._1 < _._1 )
   }
+  
+  def createOccurrencesWordMap( words : List[Word], map : Map[Occurrences,List[Word]] ) : Map[Occurrences, List[Word]] = {
+    if( map == Nil )
+      createOccurrencesWordMap( words, Map[Occurrences,List[Word]]() )
+    else if( words == Nil )
+      map.toMap[Occurrences,List[Word]]
+    else {
+      val word = words.head
+      val occurrences = wordOccurrences( word )
+      if( !map.contains( occurrences ) )
+        createOccurrencesWordMap( words.tail, map + (occurrences -> List(word) ) )
+      else {
+        val list = word::map.get(occurrences).get
+        createOccurrencesWordMap( words. tail, (map - occurrences) + (occurrences -> list))
+      }
+    }
+  }
 
 	/**
 	 * Question 2: Valid words
@@ -41,9 +58,8 @@ object Anagrams {
 	 * The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
 	 * the words that have that occurrence count. This map serves as an easy way to obtain all the anagrams of a word given its occurrence list.
 	 */
-	lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = {
-    dictionary map { case ( w ) => wordOccurrences(w) }
-  }
+	lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] =
+			createOccurrencesWordMap( dictionary, Map[Occurrences,List[Word]]() )
 
 	/**
 	 * Question 3: Returns all the anagrams of a given word
