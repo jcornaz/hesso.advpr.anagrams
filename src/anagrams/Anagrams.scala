@@ -5,19 +5,14 @@ package anagrams
  * MSE course, T-AdvPrPa course
  */
 object Anagrams {
+  
 	/**
 	 * Types definitions
 	 */
 	type Word = String
 	type Occurrences = List[(Char, Int)]
 	type Sentence = List[Word]
-
-	/**
-	 * The dictionary is simply a sequence of words.
-	 * It is predefined and obtained as a sequence using the utility method `loadDictionary`.
-	 */
-	val dictionary: List[Word] = loadDictionary()
-
+    
 	/**
 	 *  Question 1 : converts the word into its character occurrence list.
 	 *
@@ -28,7 +23,11 @@ object Anagrams {
 	 *  Note: the upper case and lower case version of the character are treated as the
 	 *  same character, and are represented as a lower case character in the occurrence list.
 	 */
-	def wordOccurrences(w: Word): Occurrences = ???
+	def wordOccurrences(w: Word): Occurrences = {
+    val grouped = w.toLowerCase.toList.groupBy( s => s )
+    val transformed = grouped map { case (key,value) => (key, value.length) }
+    transformed.toList.sortWith( _._1 < _._1 )
+  }
 
 	/**
 	 * Question 2: Valid words
