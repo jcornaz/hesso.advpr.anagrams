@@ -64,7 +64,7 @@ object Anagrams {
 	/**
 	 * Question 3: Returns all the anagrams of a given word
 	 */	
-	def wordAnagrams(word: Word): List[Word] = ???
+	def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences(wordOccurrences(word))
 	
 	/**
 	 * Question 4: Returns all the subsets of an occurrence list
