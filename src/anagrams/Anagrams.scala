@@ -36,10 +36,10 @@ object Anagrams {
   }
   
   def createOccurrencesWordMap( words : List[Word], map : Map[Occurrences,List[Word]] ) : Map[Occurrences, List[Word]] = {
-    if( map == Nil )
+    if( words == Nil )
+      map
+    else if( map == Nil )
       createOccurrencesWordMap( words, Map[Occurrences,List[Word]]() )
-    else if( words == Nil )
-      map.toMap[Occurrences,List[Word]]
     else {
       val word = words.head
       val occurrences = wordOccurrences( word )
