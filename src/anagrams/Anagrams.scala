@@ -70,9 +70,15 @@ object Anagrams {
 	 * Question 4: Returns all the subsets of an occurrence list
 	 */
 
-  def eltCombinations( occurrence : (Char, Int) ) : List[Occurrences] = {
+  /**
+   * Generates the subset for one occurence.
+   * 
+   * For instance,
+   * eltCombinations(('c',3)) give List(('c',3'),('c',2),('c',1))
+   */
+  def eltCombinations( occurrence : (Char, Int) ) : List[(Char,Int)] = {
     if( occurrence._2 <= 1 )
-      List[Occurrences](occurrence)
+      List[(Char,Int)](occurrence)
     else
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
   }
