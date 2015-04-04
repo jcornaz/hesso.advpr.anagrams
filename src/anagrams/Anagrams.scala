@@ -110,8 +110,9 @@ object Anagrams {
 	/**
 	 * Question 5: remove occurrences from x that are in y
 	 */
-	def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
-	
+	def subtract(x: Occurrences, y: Occurrences): Occurrences =
+     x.filter( !y.contains(_) ) 
+  
 	/**
 	 * Question 6 - Generate sentence anagrams
 	 */
