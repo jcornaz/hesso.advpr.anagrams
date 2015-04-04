@@ -38,8 +38,6 @@ object Anagrams {
   def createOccurrencesWordMap( words : List[Word], map : Map[Occurrences,List[Word]] ) : Map[Occurrences, List[Word]] = {
     if( words == Nil )
       map
-    else if( map == Nil )
-      createOccurrencesWordMap( words, Map[Occurrences,List[Word]]() )
     else {
       val word = words.head
       val occurrences = wordOccurrences( word )
@@ -71,26 +69,42 @@ object Anagrams {
 	 */
 
   /**
-   * Generates the subset for one occurence.
+   * Generates the subset for one occurrence.
    * 
    * For instance,
    * eltCombinations(('c',3)) give List(('c',3'),('c',2),('c',1))
    */
   def eltCombinations( occurrence : (Char, Int) ) : List[(Char,Int)] = {
-    if( occurrence._2 <= 1 )
-      List[(Char,Int)](occurrence)
+    if( occurrence._2 == 0 )
+      List[(Char,Int)]()
     else
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
+  }
+  
+  def appendElement[T]( lst : List[T], elt : T) : List[T] = 
+    (elt::lst.reverse).reverse
+  
+  def append[T]( lst1 : List[T], lst2 : List[T] ) : List[T] = {
+    if( lst1 == Nil )
+      lst2
+    else if( lst2 == Nil )
+      lst1
+    else
+      append( appendElement( lst1, lst2.head ), lst2.tail )
   }
   
 	/**
 	 * Generates all the subsets of a set
 	 */
-	def combinations(occurrences: Occurrences): List[Occurrences] = {
+	def combinations(occurrences: Occurrences) : List[Occurrences] = {
     if( occurrences == Nil )
       List[Occurrences](List[(Char,Int)]())
-    else
-      eltCombinations( occurrences.head )::combinations( occurrences.tail )
+    else {
+      val head = eltCombinations( occurrences.head )
+      val tail = combinations( occurrences.tail )
+      val c = tail.map( (lst : Occurrences) => head.map( (pair : (Char,Int)) => pair::lst ) ).flatten
+      append( c, tail )
+    }
   }
 	
 	/**
