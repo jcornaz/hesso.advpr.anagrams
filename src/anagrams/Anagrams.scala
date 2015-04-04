@@ -157,7 +157,7 @@ object Anagrams {
     else if( lst2 == Nil )
       lst1
     else
-      lst1.head::merge( lst1.tail, lst2 )
+      lst1.foldRight( lst2 )( (elt,lst) => elt::lst )
   }
   
   /**
