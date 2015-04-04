@@ -80,17 +80,18 @@ object Anagrams {
     else
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
   }
+
   
-  def appendElement[T]( lst : List[T], elt : T) : List[T] = 
-    (elt::lst.reverse).reverse
-  
-  def append[T]( lst1 : List[T], lst2 : List[T] ) : List[T] = {
+  /**
+   * Merge two lists together
+   */
+  def merge[T]( lst1 : List[T], lst2 : List[T] ) : List[T] = {
     if( lst1 == Nil )
       lst2
     else if( lst2 == Nil )
       lst1
     else
-      append( appendElement( lst1, lst2.head ), lst2.tail )
+      lst1.head::merge( lst1.tail, lst2 )
   }
   
 	/**
@@ -103,14 +104,15 @@ object Anagrams {
       val head = eltCombinations( occurrences.head )
       val tail = combinations( occurrences.tail )
       val c = tail.map( (lst : Occurrences) => head.map( (pair : (Char,Int)) => pair::lst ) ).flatten
-      append( c, tail )
+      merge( c, tail )
     }
   }
 	
 	/**
 	 * Question 5: remove occurrences from x that are in y
 	 */
-	def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+	def subtract(x: Occurrences, y: Occurrences): Occurrences = 
+    
 	
 	/**
 	 * Question 6 - Generate sentence anagrams
