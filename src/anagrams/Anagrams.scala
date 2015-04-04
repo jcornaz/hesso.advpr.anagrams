@@ -110,8 +110,28 @@ object Anagrams {
 	/**
 	 * Question 5: remove occurrences from x that are in y
 	 */
-	def subtract(x: Occurrences, y: Occurrences): Occurrences =
-     x.filter( !y.contains(_) ) 
+  
+  def occurrencesToMap( occurrences : Occurrences, res : Map[Char,Int] ) : Map[Char,Int] = {
+     if( occurrences == Nil )
+       res
+     else {
+       val (key, value) = occurrences.head
+       occurrencesToMap( occurrences.tail, res + (key -> value) )
+     }
+  }
+  
+	def subtract(x: Occurrences, y: Occurrences): Occurrences = {
+    val ymap = occurrencesToMap( y, Map[Char,Int]() )
+    val tmp = x.map {
+      case (key, value) => {
+        if( ymap.contains( key ) )
+          (key, value - ymap(key))
+        else
+          (key, value)
+      }
+    }
+    tmp.filter( _._2 > 0 )
+  }
   
 	/**
 	 * Question 6 - Generate sentence anagrams
