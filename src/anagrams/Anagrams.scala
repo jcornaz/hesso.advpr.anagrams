@@ -74,42 +74,31 @@ object Anagrams {
 	 * Question 4: Returns all the subsets of an occurrence list
 	 */
 
-  /**
+   /**
    * Generates the subset for one occurrence.
    * 
    * For instance,
    * eltCombinations(('c',3)) give List(('c',3'),('c',2),('c',1))
    */
   def eltCombinations( occurrence : (Char, Int) ) : List[(Char,Int)] = {
-    if( occurrence._2 == 0 )
-      List[(Char,Int)]()
+    if( occurrence._2 == 1 )
+      List[(Char,Int)]( occurrence )
     else
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
   }
-
-  /**
-   * Merge two lists together
-   */
-  def merge[T]( lst1 : List[T], lst2 : List[T] ) : List[T] = {
-    if( lst1 == Nil )
-      lst2
-    else if( lst2 == Nil )
-      lst1
-    else
-      lst1.head::merge( lst1.tail, lst2 )
-  }
   
-	/**
-	 * Generates all the subsets of a set
-	 */
-	def combinations(occurrences: Occurrences) : List[Occurrences] = {
+  /**
+   * Generates all the subsets of a set
+   */
+  def combinations(occurrences: Occurrences) : List[Occurrences] = {
     if( occurrences == Nil )
       List[Occurrences](List[(Char,Int)]())
     else {
-      val head = eltCombinations( occurrences.head )
-      val tail = combinations( occurrences.tail )
-      val c = tail.map( (lst : Occurrences) => head.map( (pair : (Char,Int)) => pair::lst ) ).flatten
-      merge( c, tail )
+      val heads = eltCombinations( occurrences.head )
+      val tails = combinations( occurrences.tail )
+      tails.foldLeft( List[Occurrences]() )( (res1, tail) => {
+        tail::heads.foldLeft( res1 )( (res2, head) => (head::tail)::res2 )
+      })
     }
   }
 	
@@ -119,7 +108,7 @@ object Anagrams {
 	 */
   
   /**
-   * Transform an instance of Occurences in a map
+   * Transform an instance of Occurrences in a map
    */
   def occurrencesToMap( occurrences : Occurrences, res : Map[Char,Int] ) : Map[Char,Int] = {
      if( occurrences == Nil )
@@ -146,14 +135,49 @@ object Anagrams {
     })
   }
   
-  
+     
 	/**
 	 * Question 6 - Generate sentence anagrams
 	 */
-	
-	/** Converts a sentence into its character occurrence list. */
-	def sentenceOccurrences(s: Sentence): Occurrences = ???
-	
-	def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
 
+	/** Converts a sentence into its character occurrence list. */
+	def sentenceOccurrences(s: Sentence): Occurrences = {
+    if( s == Nil )
+      List[(Char,Int)]()
+    else
+      wordOccurrences( s.reduce( _.concat( _ ) ) )
+  }
+	
+  /**
+   * Merge two lists together
+   */
+  def merge[T]( lst1 : List[T], lst2 : List[T] ) : List[T] = {
+    if( lst1 == Nil )
+      lst2
+    else if( lst2 == Nil )
+      lst1
+    else
+      lst1.head::merge( lst1.tail, lst2 )
+  }
+  
+  /**
+   * Compute the list of the sentence which have a given end and a given set of occurence to use for the begining
+   */
+  def completeSentenceAnagrams( occurrences : Occurrences, end : Sentence ) : List[Sentence] = {
+    if( occurrences == Nil )
+      List[Sentence](end)
+    else {
+      combinations( occurrences ).foldLeft( List[Sentence]() )( (res, subset) => {
+        if( dictionaryByOccurrences.contains( subset ) )
+          dictionaryByOccurrences( subset ).foldLeft( res )( ( sentences, word ) => {
+            merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::end ) )
+          })
+        else
+          res
+      })
+    }
+  }
+  
+	def sentenceAnagrams(sentence: Sentence): List[Sentence] =
+    completeSentenceAnagrams( sentenceOccurrences( sentence ), List[Word]() )
 }

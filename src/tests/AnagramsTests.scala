@@ -143,7 +143,10 @@ class AnagramsTests extends FunSuite {
 			List("Uzi", "Rex", "null"),
 			List("Zulu", "nil", "Rex"),
 			List("rulez", "Linux"),
-			List("Linux", "rulez"))
-		assert(sentenceAnagrams(sentence).toSet === anas.toSet)
+			List("Linux", "rulez")
+    )
+    val res = sentenceAnagrams(sentence)
+    assert(res.length == anas.length )
+		assert(res.toSet === anas.toSet)
 	}
 }
