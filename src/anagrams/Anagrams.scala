@@ -159,11 +159,14 @@ object Anagrams {
       wordOccurrences( s.reduce( _.concat( _ ) ) )
   }
 	
+  /**
+   * Compute the list of the sentence which have a given end and a given set of occurence to use for the begining
+   */
   def completeSentenceAnagrams( occurrences : Occurrences, end : Sentence ) : List[Sentence] = {
     if( occurrences == Nil )
       List[Sentence](end)
     else {
-      combinations( occurrences ).foldLeft( List[Sentence](end) )( (res, subset) => {
+      combinations( occurrences ).foldLeft( List[Sentence]() )( (res, subset) => {
         if( dictionaryByOccurrences.contains( subset ) )
           dictionaryByOccurrences( subset ).foldLeft( res )( ( sentences, word ) => {
             merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::end ) )
