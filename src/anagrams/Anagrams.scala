@@ -114,13 +114,14 @@ object Anagrams {
 	def subtract(x: Occurrences, y: Occurrences): Occurrences =
      x.filter( !y.contains(_) ) 
   
+     
 	/**
 	 * Question 6 - Generate sentence anagrams
 	 */
-	
+
 	/** Converts a sentence into its character occurrence list. */
-	def sentenceOccurrences(s: Sentence): Occurrences = ???
+	def sentenceOccurrences(s: Sentence): Occurrences = 
+    wordOccurrences( s.reduce( _.concat( _ ) ) )
 	
 	def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
-
 }
