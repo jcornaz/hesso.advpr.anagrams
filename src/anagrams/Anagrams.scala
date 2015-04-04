@@ -70,10 +70,28 @@ object Anagrams {
 	 * Question 4: Returns all the subsets of an occurrence list
 	 */
 
+  /**
+   * Generates the subset for one occurence.
+   * 
+   * For instance,
+   * eltCombinations(('c',3)) give List(('c',3'),('c',2),('c',1))
+   */
+  def eltCombinations( occurrence : (Char, Int) ) : List[(Char,Int)] = {
+    if( occurrence._2 <= 1 )
+      List[(Char,Int)](occurrence)
+    else
+      occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
+  }
+  
 	/**
 	 * Generates all the subsets of a set
 	 */
-	def combinations(occurrences: Occurrences): List[Occurrences] = ???
+	def combinations(occurrences: Occurrences): List[Occurrences] = {
+    if( occurrences == Nil )
+      List[Occurrences](List[(Char,Int)]())
+    else
+      eltCombinations( occurrences.head )::combinations( occurrences.tail )
+  }
 	
 	/**
 	 * Question 5: remove occurrences from x that are in y
