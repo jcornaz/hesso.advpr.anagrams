@@ -146,7 +146,6 @@ object Anagrams {
     })
   }
   
-  
      
 	/**
 	 * Question 6 - Generate sentence anagrams
@@ -156,5 +155,21 @@ object Anagrams {
 	def sentenceOccurrences(s: Sentence): Occurrences = 
     wordOccurrences( s.reduce( _.concat( _ ) ) )
 	
-	def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def completeSentenceAnagrams( occurrences : Occurrences, begin : Sentence ) : List[Sentence] = {
+    if( occurrences == Nil )
+      List[Sentence](begin)
+    else {
+      combinations( occurrences ).foldLeft( List[Sentence]() )( (res, subset) => {
+        if( dictionaryByOccurrences.contains( subset ) )
+          dictionaryByOccurrences( subset ).foldLeft( res )( ( sentences, word ) => {
+            merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::begin ) )
+          })
+        else
+          res
+      })
+    }
+  }
+  
+	def sentenceAnagrams(sentence: Sentence): List[Sentence] =
+    completeSentenceAnagrams( sentenceOccurrences( sentence ), List[Word]() )
 }
