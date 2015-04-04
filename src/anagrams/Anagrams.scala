@@ -19,6 +19,7 @@ object Anagrams {
    */
   val dictionary: List[Word] = loadDictionary()
     
+  
 	/**
 	 *  Question 1 : converts the word into its character occurrence list.
 	 *
@@ -35,6 +36,9 @@ object Anagrams {
     transformed.toList.sortWith( _._1 < _._1 )
   }
   
+  /**
+   * Create a map, with occurrences as keys and corresponding word list as value
+   */
   def createOccurrencesWordMap( words : List[Word], map : Map[Occurrences,List[Word]] ) : Map[Occurrences, List[Word]] = {
     if( words == Nil )
       map
@@ -49,6 +53,7 @@ object Anagrams {
       }
     }
   }
+  
 
 	/**
 	 * Question 2: Valid words
@@ -64,6 +69,7 @@ object Anagrams {
 	 */	
 	def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences(wordOccurrences(word))
 	
+  
 	/**
 	 * Question 4: Returns all the subsets of an occurrence list
 	 */
@@ -81,7 +87,6 @@ object Anagrams {
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
   }
 
-  
   /**
    * Merge two lists together
    */
@@ -108,19 +113,70 @@ object Anagrams {
     }
   }
 	
+  
 	/**
 	 * Question 5: remove occurrences from x that are in y
 	 */
-	def subtract(x: Occurrences, y: Occurrences): Occurrences = 
-    
-	
+  
+  /**
+   * Transform an instance of Occurences in a map
+   */
+  def occurrencesToMap( occurrences : Occurrences, res : Map[Char,Int] ) : Map[Char,Int] = {
+     if( occurrences == Nil )
+       res
+     else {
+       val (key, value) = occurrences.head
+       occurrencesToMap( occurrences.tail, res + (key -> value) )
+     }
+  }
+  
+  /**
+   * Deduce from x the occurrences in y
+   */
+	def subtract(x: Occurrences, y: Occurrences): Occurrences = {
+    val ymap = occurrencesToMap( y, Map[Char,Int]() )
+    x.foldRight(List[(Char,Int)]())( (pair, lst) => {
+      if( ymap.contains( pair._1 ) )
+         if( ymap( pair._1 ) >= pair._2 )
+           lst
+         else
+           (pair._1, pair._2 - ymap( pair._1 ) )::lst
+      else
+        pair::lst
+    })
+  }
+  
+     
 	/**
 	 * Question 6 - Generate sentence anagrams
 	 */
-	
-	/** Converts a sentence into its character occurrence list. */
-	def sentenceOccurrences(s: Sentence): Occurrences = ???
-	
-	def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
 
+	/** Converts a sentence into its character occurrence list. */
+	def sentenceOccurrences(s: Sentence): Occurrences = {
+    if( s == Nil )
+      List[(Char,Int)]()
+    else
+      wordOccurrences( s.reduce( _.concat( _ ) ) )
+  }
+	
+  /**
+   * Compute the list of the sentence which have a given end and a given set of occurence to use for the begining
+   */
+  def completeSentenceAnagrams( occurrences : Occurrences, end : Sentence ) : List[Sentence] = {
+    if( occurrences == Nil )
+      List[Sentence](end)
+    else {
+      combinations( occurrences ).foldLeft( List[Sentence]() )( (res, subset) => {
+        if( dictionaryByOccurrences.contains( subset ) )
+          dictionaryByOccurrences( subset ).foldLeft( res )( ( sentences, word ) => {
+            merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::end ) )
+          })
+        else
+          res
+      })
+    }
+  }
+  
+	def sentenceAnagrams(sentence: Sentence): List[Sentence] =
+    completeSentenceAnagrams( sentenceOccurrences( sentence ), List[Word]() )
 }
