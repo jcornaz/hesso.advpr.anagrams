@@ -106,11 +106,11 @@ class AnagramsTests extends FunSuite {
 		assert(subtract(lard, lard) === List())
 	}
   
-  test("subtract: \"jonathan\" - \"n\"") {
+  test("subtract: \"jonathan\" - \"han\"") {
     val jonathan = List(('a',2), ('h', 1), ('j', 1), ('n', 2), ('o', 1), ('t', 1))
-    val n = List(('n', 1))
-    val joathan = List(('a',2), ('h', 1), ('j', 1), ('n', 1), ('o', 1), ('t', 1))
-    assert( subtract( jonathan, n ) === joathan )
+    val han = List(('a',1),('h',1),('n', 1))
+    val jonat = List(('a',1), ('j', 1), ('n', 1), ('o', 1), ('t', 1))
+    assert( subtract( jonathan, han ) === jonat )
   }
 	
 	/**
