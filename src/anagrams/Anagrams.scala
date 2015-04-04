@@ -152,17 +152,21 @@ object Anagrams {
 	 */
 
 	/** Converts a sentence into its character occurrence list. */
-	def sentenceOccurrences(s: Sentence): Occurrences = 
-    wordOccurrences( s.reduce( _.concat( _ ) ) )
+	def sentenceOccurrences(s: Sentence): Occurrences = {
+    if( s == Nil )
+      List[(Char,Int)]()
+    else
+      wordOccurrences( s.reduce( _.concat( _ ) ) )
+  }
 	
-  def completeSentenceAnagrams( occurrences : Occurrences, begin : Sentence ) : List[Sentence] = {
+  def completeSentenceAnagrams( occurrences : Occurrences, end : Sentence ) : List[Sentence] = {
     if( occurrences == Nil )
-      List[Sentence](begin)
+      List[Sentence](end)
     else {
-      combinations( occurrences ).foldLeft( List[Sentence]() )( (res, subset) => {
+      combinations( occurrences ).foldLeft( List[Sentence](end) )( (res, subset) => {
         if( dictionaryByOccurrences.contains( subset ) )
           dictionaryByOccurrences( subset ).foldLeft( res )( ( sentences, word ) => {
-            merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::begin ) )
+            merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::end ) )
           })
         else
           res
