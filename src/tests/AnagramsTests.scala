@@ -149,4 +149,43 @@ class AnagramsTests extends FunSuite {
     assert(res.length == anas.length )
 		assert(res.toSet === anas.toSet)
 	}
+  
+  test("sentence anagrams: I love you") {
+    val sentence = List("I", "Love", "You")
+    val anas = List(
+        List("you", "olive"),
+        List("Io", "you", "Lev"),
+        List("you", "Io", "Lev"),
+        List("Lev", "you", "Io"),
+        List("you", "Lev", "Io"),
+        List("Lev", "Io", "you"),
+        List("olive", "you"),
+        List("Io", "Lev", "you")
+    )
+    val res = sentenceAnagrams( sentence )
+    assert( res.length == anas.length )
+    assert( res.toSet === anas.toSet )
+  }
+  
+  test("sentence anagrams: debit card") {
+    val sentence = List( "debit", "card" )
+    val anas = sentenceAnagrams( sentence )
+    assert( anas.length == 242 )
+    assert( anas.contains( List("bad", "credit" ) ) )
+  }
+  
+  test("sentence anagrams: Mickey Mouse") {
+    val sentence = List( "Mickey", "Mouse" )
+    val anas = sentenceAnagrams( sentence )
+    assert( anas.length == 1154 )
+    assert( anas.contains( List("you", "me", "sick", "me" ) ) )
+    assert( anas.contains( List("Ku", "mice", "soy", "em" ) ) )
+  }
+  
+  test("sentence anagrams: Eleven plus two") {
+    val sentence = List( "eleven", "plus", "two" )
+    val anas = sentenceAnagrams( sentence )
+    assert( anas.length == 50526 )
+    assert( anas.contains( List("twelve", "plus", "one" ) ) )
+  }
 }

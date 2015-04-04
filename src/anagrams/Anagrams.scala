@@ -157,11 +157,11 @@ object Anagrams {
     else if( lst2 == Nil )
       lst1
     else
-      lst1.head::merge( lst1.tail, lst2 )
+      lst1.foldRight( lst2 )( (elt,lst) => elt::lst )
   }
   
   /**
-   * Compute the list of the sentence which have a given end and a given set of occurence to use for the begining
+   * Compute the list of the sentence which have a given end and a given set of occurrence to use for the beginning
    */
   def completeSentenceAnagrams( occurrences : Occurrences, end : Sentence ) : List[Sentence] = {
     if( occurrences == Nil )
@@ -170,7 +170,7 @@ object Anagrams {
       combinations( occurrences ).foldLeft( List[Sentence]() )( (res, subset) => {
         if( dictionaryByOccurrences.contains( subset ) )
           dictionaryByOccurrences( subset ).foldLeft( res )( ( sentences, word ) => {
-            merge( res, completeSentenceAnagrams( subtract( occurrences, subset ), word::end ) )
+            merge( sentences, completeSentenceAnagrams( subtract( occurrences, subset ), word::end ) )
           })
         else
           res
