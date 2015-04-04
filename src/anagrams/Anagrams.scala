@@ -19,6 +19,7 @@ object Anagrams {
    */
   val dictionary: List[Word] = loadDictionary()
     
+  
 	/**
 	 *  Question 1 : converts the word into its character occurrence list.
 	 *
@@ -68,6 +69,7 @@ object Anagrams {
 	 */	
 	def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences(wordOccurrences(word))
 	
+  
 	/**
 	 * Question 4: Returns all the subsets of an occurrence list
 	 */
@@ -85,7 +87,6 @@ object Anagrams {
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
   }
 
-  
   /**
    * Merge two lists together
    */
@@ -112,6 +113,7 @@ object Anagrams {
     }
   }
 	
+  
 	/**
 	 * Question 5: remove occurrences from x that are in y
 	 */
@@ -143,6 +145,7 @@ object Anagrams {
         pair::lst
     })
   }
+  
   
 	/**
 	 * Question 6 - Generate sentence anagrams
