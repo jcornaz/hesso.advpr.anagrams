@@ -122,15 +122,15 @@ object Anagrams {
   
 	def subtract(x: Occurrences, y: Occurrences): Occurrences = {
     val ymap = occurrencesToMap( y, Map[Char,Int]() )
-    val tmp = x.map {
-      case (key, value) => {
-        if( ymap.contains( key ) )
-          (key, value - ymap(key))
-        else
-          (key, value)
-      }
-    }
-    tmp.filter( _._2 > 0 )
+    x.foldRight(List[(Char,Int)]())( (pair, lst) => {
+      if( ymap.contains( pair._1 ) )
+         if( ymap( pair._1 ) >= pair._2 )
+           lst
+         else
+           (pair._1, pair._2 - ymap( pair._1 ) )::lst
+      else
+        pair::lst
+    })
   }
   
 	/**
