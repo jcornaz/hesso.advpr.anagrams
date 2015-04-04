@@ -61,7 +61,8 @@ class AnagramsTests extends FunSuite {
 			List(),
 			List(('a', 1)),
 			List(('a', 2))
-			)
+		)
+    assert(aa.length == aacomb.length )
 		assert(combinations(aa).toSet === aacomb.toSet)
 	}
 	
@@ -76,7 +77,9 @@ class AnagramsTests extends FunSuite {
 			List(('a', 2), ('b', 1)),
 			List(('b', 2)),
 			List(('a', 1), ('b', 2)),
-			List(('a', 2), ('b', 2)))
+			List(('a', 2), ('b', 2))
+    )
+    assert(abba.length == abbacomb.length )
 		assert(combinations(abba).toSet === abbacomb.toSet)
 	}
 	

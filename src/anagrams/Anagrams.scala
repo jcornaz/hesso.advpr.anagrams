@@ -81,13 +81,16 @@ object Anagrams {
       occurrence::eltCombinations( (occurrence._1, occurrence._2 - 1) )
   }
   
+  def appendElement[T]( lst : List[T], elt : T) : List[T] = 
+    (elt::lst.reverse).reverse
+  
   def append[T]( lst1 : List[T], lst2 : List[T] ) : List[T] = {
     if( lst1 == Nil )
       lst2
     else if( lst2 == Nil )
       lst1
     else
-      lst1.head::append( lst1.tail, lst2 )
+      append( appendElement( lst1, lst2.head ), lst2.tail )
   }
   
 	/**
