@@ -35,6 +35,9 @@ object Anagrams {
     transformed.toList.sortWith( _._1 < _._1 )
   }
   
+  /**
+   * Create a map, with occurrences as keys and corresponding word list as value
+   */
   def createOccurrencesWordMap( words : List[Word], map : Map[Occurrences,List[Word]] ) : Map[Occurrences, List[Word]] = {
     if( words == Nil )
       map
@@ -112,6 +115,9 @@ object Anagrams {
 	 * Question 5: remove occurrences from x that are in y
 	 */
   
+  /**
+   * Transform an instance of Occurences in a map
+   */
   def occurrencesToMap( occurrences : Occurrences, res : Map[Char,Int] ) : Map[Char,Int] = {
      if( occurrences == Nil )
        res
@@ -121,6 +127,9 @@ object Anagrams {
      }
   }
   
+  /**
+   * Deduce from x the occurrences in y
+   */
 	def subtract(x: Occurrences, y: Occurrences): Occurrences = {
     val ymap = occurrencesToMap( y, Map[Char,Int]() )
     x.foldRight(List[(Char,Int)]())( (pair, lst) => {
